@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>OpenPhone Redirect</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; text-align:center; padding:40px; }
+    .btn { display:inline-block; padding:12px 18px; background:#0073e6; color:#fff; text-decoration:none; border-radius:6px; }
+    .muted { color:#666; font-size:0.95rem; margin-top:12px; display:block; }
+  </style>
+</head>
+<body>
+  <h2>Launching OpenPhone...</h2>
+  <p>If your app doesn't open automatically, tap the button below.</p>
+  <a id="manual" class="btn" href="#">OpenPhone</a>
+  <p class="muted">If you don’t have OpenPhone installed you will be taken to their website.</p>
+
+  <script>
+    // Read query params
+    const params = new URLSearchParams(window.location.search);
+    const to   = params.get('number') || '';
+    const from = params.get('from')   || '';
+
+    // Build deep link
+    const deep = 'openphone://dial?number=' + encodeURIComponent(to) +
+                 '&from=' + encodeURIComponent(from) + '&action=call';
+
+    // Set manual button href for users who need to click
+    document.getElementById('manual').href = deep;
+
+    // Try direct redirect
+    setTimeout(function() {
+      window.location.href = deep;
+    }, 200);
+
+    // Optional: after a short delay, go to website fallback
+    setTimeout(function() {
+      window.location.href = 'https://www.openphone.com';
+    }, 2500);
+  </script>
+</body>
+</html>
